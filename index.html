@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forever Valentine 💖</title>
+
+<style>
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at bottom, #0d1b2a, #000814);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 20px;
+}
+
+/* Card */
+.card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(255, 0, 100, 0.5);
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    z-index: 10;
+}
+
+h1 {
+    color: #ff4d6d;
+    font-size: 24px;
+}
+
+p {
+    font-size: 16px;
+}
+
+/* Buttons */
+.buttons {
+    margin-top: 20px;
+    position: relative;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#yesBtn {
+    background: #ff4d6d;
+    color: white;
+}
+#noBtn {
+    background: gray;
+    color: white;
+    position: absolute;
+    left: 60%;
+}
+
+}
+
+/* Message */
+.message {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #ffccd5;
+    display: none;
+}
+
+/* Falling petals */
+.petal {
+    position: fixed;
+    top: -50px;
+    font-size: 20px;
+    animation: fall linear forwards;
+    pointer-events: none;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Sparkle stars */
+.star {
+    position: fixed;
+    background: white;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background Music -->
+<audio id="bgMusic" loop>
+    <source src="romantic.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+    <h1>Will You Be Mine Forever? 💖</h1>
+    <p>You are the brightest star in my night sky ✨</p>
+
+    <div class="buttons">
+        <button id="yesBtn">Yes 💖</button>
+        <button id="noBtn">No 😢</button>
+    </div>
+
+    <div class="message" id="message">
+        💍 Love you Ammukutty 💍
+        <br><br>
+        <img id="hugGif"
+             src="https://media.giphy.com/media/od5H3PmEG5EVq/giphy.gif"
+             width="200"
+             style="display:none; border-radius:15px;">
+    </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const message = document.getElementById("message");
+const hugGif = document.getElementById("hugGif");
+const music = document.getElementById("bgMusic");
+
+/* Start music on first click anywhere */
+document.addEventListener("click", function startMusic() {
+    music.play();
+    document.removeEventListener("click", startMusic);
+});
+
+/* No button runs away (Mobile + Desktop) */
+noBtn.addEventListener("mouseover", moveButton);
+noBtn.addEventListener("touchstart", moveButton);
+
+
+function moveButton() {
+    const container = document.querySelector(".buttons");
+    const rect = container.getBoundingClientRect();
+
+    const buttonWidth = noBtn.offsetWidth;
+    const buttonHeight = noBtn.offsetHeight;
+
+    const maxX = rect.width - buttonWidth;
+    const maxY = rect.height - buttonHeight;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+
+
+
+/* Yes button click */
+yesBtn.addEventListener("click", () => {
+    message.style.display = "block";
+    hugGif.style.display = "block";
+    createExplosion();
+});
+
+/* Heart explosion */
+function createExplosion() {
+    for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.innerHTML = "💘";
+        heart.style.position = "absolute";
+        heart.style.left = "50%";
+        heart.style.top = "50%";
+        heart.style.fontSize = "20px";
+        heart.style.pointerEvents = "none";
+        document.body.appendChild(heart);
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 300;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+
+        heart.animate([
+            { transform: "translate(-50%, -50%)", opacity: 1 },
+            { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
+        ], {
+            duration: 1000,
+            easing: "ease-out"
+        });
+
+        setTimeout(() => heart.remove(), 1000);
+    }
+}
+
+/* Falling petals */
+function createPetal() {
+    const petal = document.createElement("div");
+    petal.classList.add("petal");
+    petal.innerHTML = "🌹";
+    petal.style.left = Math.random() * 100 + "vw";
+    petal.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    document.body.appendChild(petal);
+    setTimeout(() => petal.remove(), 6000);
+}
+setInterval(createPetal, 400);
+
+/* Sparkle stars */
+for (let i = 0; i < 100; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.animationDuration = (Math.random() * 2 + 1) + "s";
+    document.body.appendChild(star);
+}
+</script>
+
+</body>
+</html>
